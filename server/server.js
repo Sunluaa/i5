@@ -1,37 +1,44 @@
-// server.js
+require('dotenv').config(); // <-- Подключаем .env
+
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ObjectId } = require('mongodb');
 
 const CONTACTS_COLLECTION = 'contacts';
-const DEFAULT_DB = process.env.DB_NAME || 'test';
-const MONGO_URI = process.env.MONGODB_URI || `mongodb://localhost:27017/${DEFAULT_DB}`;
+
+// Переменные окружения
 const PORT = process.env.PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI;
+const DB_NAME = process.env.DB_NAME || 'test';
 
 const app = express();
 app.use(cors());
-app.use(express.json()); // body parser
+app.use(express.json());
 
-let db;
+let db; // глобальная ссылка на БД
 
-// Подключаемся к MongoDB и стартуем сервер
+// --- Подключение к MongoDB ---
 async function start() {
   try {
-    const client = await MongoClient.connect(MONGO_URI);
-    db = client.db(); // используется база из URI
-    console.log('Connected to MongoDB:', MONGO_URI);
+    if (!MONGODB_URI) {
+      throw new Error('❌ MONGODB_URI is not set in .env');
+    }
+
+    const client = await MongoClient.connect(MONGODB_URI);
+    db = client.db(DB_NAME);
+
+    console.log(`✅ Connected to MongoDB: ${DB_NAME}`);
 
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`🚀 Server is running on port ${PORT}`);
     });
   } catch (err) {
-    console.error('Failed to connect to MongoDB', err);
+    console.error('❌ Failed to connect to MongoDB', err);
     process.exit(1);
   }
 }
 
-
-// Вспомогательная валидация
+// --- Валидация контакта ---
 function validateContact(data) {
   const errors = [];
   if (!data) errors.push('Body is required');
@@ -42,7 +49,9 @@ function validateContact(data) {
   return errors;
 }
 
-// GET /contacts - список
+// --- CRUD маршруты ---
+
+// GET /contacts
 app.get('/contacts', async (req, res) => {
   try {
     const docs = await db.collection(CONTACTS_COLLECTION).find({}).toArray();
@@ -53,13 +62,15 @@ app.get('/contacts', async (req, res) => {
   }
 });
 
-// GET /contacts/:id - один контакт
+// GET /contacts/:id
 app.get('/contacts/:id', async (req, res) => {
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid id' });
+
     const doc = await db.collection(CONTACTS_COLLECTION).findOne({ _id: new ObjectId(id) });
     if (!doc) return res.status(404).json({ error: 'Not found' });
+
     res.json(doc);
   } catch (err) {
     console.error(err);
@@ -67,18 +78,14 @@ app.get('/contacts/:id', async (req, res) => {
   }
 });
 
-// POST /contacts - создать
+// POST /contacts
 app.post('/contacts', async (req, res) => {
   try {
-    const body = req.body;
-    const errors = validateContact(body);
+    const errors = validateContact(req.body);
     if (errors.length) return res.status(400).json({ errors });
 
     const insertResult = await db.collection(CONTACTS_COLLECTION).insertOne({
-      name: body.name,
-      phone: body.phone,
-      email: body.email || null,
-      address: body.address || null,
+      ...req.body,
       createdAt: new Date()
     });
 
@@ -90,28 +97,22 @@ app.post('/contacts', async (req, res) => {
   }
 });
 
-// PUT /contacts/:id - обновить
+// PUT /contacts/:id
 app.put('/contacts/:id', async (req, res) => {
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid id' });
 
-    const body = req.body;
-    // Можно частично обновлять - поэтому не требуем все поля
-    const update = {};
-    if (body.name) update.name = body.name;
-    if (body.phone) update.phone = body.phone;
-    if ('email' in body) update.email = body.email;
-    if ('address' in body) update.address = body.address;
-    if (Object.keys(update).length === 0) return res.status(400).json({ error: 'No fields to update' });
+    const update = { ...req.body, updatedAt: new Date() };
 
     const result = await db.collection(CONTACTS_COLLECTION).findOneAndUpdate(
       { _id: new ObjectId(id) },
-      { $set: { ...update, updatedAt: new Date() } },
+      { $set: update },
       { returnDocument: 'after' }
     );
 
     if (!result.value) return res.status(404).json({ error: 'Not found' });
+
     res.json(result.value);
   } catch (err) {
     console.error(err);
@@ -119,13 +120,16 @@ app.put('/contacts/:id', async (req, res) => {
   }
 });
 
-// DELETE /contacts/:id - удалить
+// DELETE /contacts/:id
 app.delete('/contacts/:id', async (req, res) => {
   try {
     const id = req.params.id;
     if (!ObjectId.isValid(id)) return res.status(400).json({ error: 'Invalid id' });
+
     const result = await db.collection(CONTACTS_COLLECTION).deleteOne({ _id: new ObjectId(id) });
+
     if (result.deletedCount === 0) return res.status(404).json({ error: 'Not found' });
+
     res.status(204).end();
   } catch (err) {
     console.error(err);
@@ -133,7 +137,7 @@ app.delete('/contacts/:id', async (req, res) => {
   }
 });
 
-// Root health
+// Health check
 app.get('/', (req, res) => res.send({ ok: true, env: process.env.NODE_ENV || 'development' }));
 
 start();

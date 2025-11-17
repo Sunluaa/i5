@@ -1,20 +1,21 @@
 {
-  "name": "server",
+  "name": "contacts-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "CRUD REST API for contacts (practical work 5)",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": ""
+    "dev": "nodemon server.js"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "author": "Sunluaa",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
     "express": "^5.1.0",
-    "mongoose": "^8.19.4"
+    "mongodb": "^7.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   }
 }

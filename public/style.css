@@ -3,50 +3,35 @@ body {
   display: flex;
   margin: 0;
   background: #e8f5e9;
-  height: 100vh;
+  min-height: 100vh;
 }
 
-/* ---------------- Sidebar ---------------- */
+/* Sidebar */
 .sidebar {
   width: 220px;
   padding: 20px;
   background: #1b5e20;
   color: white;
-  height: 100vh;
 }
 
-.sidebar h2 {
-  margin-top: 0;
-}
-
-.sidebar li {
-  list-style: none;
-  margin: 12px 0;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* ---------------- Main content ---------------- */
+/* Основной контейнер */
 .container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;   /* ВЫРАВНИВАЕМ ПО ПРАВОЙ СТОРОНЕ */
-  padding: 30px;
-}
-
-.container > * {
-  width: 600px; /* фиксированная колонка справа */
+  align-items: center;   /* Центрируем */
+  padding: 40px;
 }
 
 h1 {
-  text-align: right;
-  margin-bottom: 25px;
   color: #1b5e20;
+  width: 600px;
+  margin: 0 0 20px 0;
 }
 
-/* ---------------- Form ---------------- */
+/* Форма */
 .form {
+  width: 600px;
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
@@ -59,59 +44,64 @@ h1 {
   border: 2px solid #c8e6c9;
 }
 
-.add-btn, .save-btn {
+.add-btn {
   padding: 10px 15px;
   border: none;
   border-radius: 6px;
+  background: #66bb6a;
   color: white;
   cursor: pointer;
 }
 
-#save-btn {
-  display: none;
-  background: #2e7d32;
+.add-btn:hover {
+  background: #43a047;
 }
 
-.add-btn {
-  background: #66bb6a;
+/* LIST */
+#list {
+  width: 600px;
+  padding: 0;
+  list-style: none;
+  margin: 0;
 }
 
-.add-btn:hover { background: #43a047; }
-.save-btn:hover { background: #1b5e20; }
-
-/* ---------------- Contact card ---------------- */
+/* CONTACT CARD */
 .contact {
   background: #f1f8e9;
   border: 1px solid #c5e1a5;
   padding: 15px;
-  margin-bottom: 12px;
   border-radius: 8px;
+  margin-bottom: 12px;
+}
 
+.contact-info {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 3px;
 }
 
 .actions {
+  margin-top: 10px;
   display: flex;
-  gap: 10px;
+  gap: 6px;
 }
 
-.edit-btn {
-  background: #ffee58;
+.edit-btn,
+.delete-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px 10px;
   border: none;
-  padding: 7px 10px;
   border-radius: 6px;
   cursor: pointer;
 }
 
-.delete-btn {
-  background: #e53935;
-  color: white;
-  border: none;
-  padding: 7px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-}
+.edit-btn { background: #ffee58; }
+.delete-btn { background: #e53935; color: white; }
+.save-btn { background: #66bb6a; color: white; }
+.cancel-btn { background: #ccc; }
 
 .edit-btn:hover { background: #fbc02d; }
 .delete-btn:hover { background: #b71c1c; }
+.save-btn:hover { background: #43a047; }
+.cancel-btn:hover { background: #aaa; }

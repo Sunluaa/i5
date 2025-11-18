@@ -7,13 +7,10 @@
 </head>
 
 <body>
+
   <div class="sidebar">
-    <h2>Меню</h2>
-    <ul>
-      <li>📗 Контакты</li>
-      <li>📊 Статистика</li>
-      <li>⚙️ Настройки</li>
-    </ul>
+    <h2>Контакты</h2>
+    <p>CRUD приложение</p>
   </div>
 
   <div class="container">
@@ -23,9 +20,9 @@
       <input id="name" placeholder="Имя">
       <input id="email" placeholder="Email">
       <input id="phone" placeholder="Телефон">
+      <input id="address" placeholder="Адрес">
 
-      <button id="add-btn" class="add-btn" onclick="addContact()">Добавить</button>
-      <button id="save-btn" class="save-btn" onclick="saveEdit()">Сохранить</button>
+      <button class="add-btn" onclick="addContact()">Добавить</button>
     </div>
 
     <ul id="list"></ul>

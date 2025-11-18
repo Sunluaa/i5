@@ -1,110 +1,117 @@
-/* Общий стиль */
 body {
-  font-family: "Segoe UI", sans-serif;
-  background: #e8f5e9;            /* мягкий зеленоватый фон */
+  font-family: "Segoe UI", Arial;
+  display: flex;
   margin: 0;
-  padding: 30px;
-  color: #2e7d32;                 /* тёмно-зелёный текст */
+  background: #e8f5e9;
+  height: 100vh;
 }
 
-/* Контейнер */
+/* ---------------- Sidebar ---------------- */
+.sidebar {
+  width: 220px;
+  padding: 20px;
+  background: #1b5e20;
+  color: white;
+  height: 100vh;
+}
+
+.sidebar h2 {
+  margin-top: 0;
+}
+
+.sidebar li {
+  list-style: none;
+  margin: 12px 0;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* ---------------- Main content ---------------- */
 .container {
-  max-width: 750px;
-  margin: 0 auto;
-  background: white;
-  padding: 25px 30px;
-  border-radius: 14px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  border-left: 8px solid #66bb6a; /* зелёная полоса */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;   /* ВЫРАВНИВАЕМ ПО ПРАВОЙ СТОРОНЕ */
+  padding: 30px;
 }
 
-/* Заголовок */
+.container > * {
+  width: 600px; /* фиксированная колонка справа */
+}
+
 h1 {
-  text-align: center;
+  text-align: right;
   margin-bottom: 25px;
   color: #1b5e20;
 }
 
-/* Форма */
+/* ---------------- Form ---------------- */
 .form {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  gap: 8px;
+  margin-bottom: 20px;
 }
 
 .form input {
   flex: 1;
   padding: 10px;
-  border: 2px solid #c8e6c9;
   border-radius: 6px;
-  outline: none;
-  transition: 0.2s;
+  border: 2px solid #c8e6c9;
 }
 
-.form input:focus {
-  border-color: #66bb6a;
-  box-shadow: 0 0 6px rgba(102,187,106,0.4);
-}
-
-/* Кнопка */
-.add-btn {
-  background: #66bb6a;
-  border: none;
+.add-btn, .save-btn {
   padding: 10px 15px;
+  border: none;
   border-radius: 6px;
   color: white;
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
 }
 
-.add-btn:hover {
-  background: #43a047;
+#save-btn {
+  display: none;
+  background: #2e7d32;
 }
 
-/* Список */
-#list {
-  margin-top: 20px;
-  padding: 0;
-  list-style: none;
+.add-btn {
+  background: #66bb6a;
 }
 
-/* Карточка контакта */
+.add-btn:hover { background: #43a047; }
+.save-btn:hover { background: #1b5e20; }
+
+/* ---------------- Contact card ---------------- */
 .contact {
-  padding: 15px;
   background: #f1f8e9;
   border: 1px solid #c5e1a5;
-  border-radius: 8px;
+  padding: 15px;
   margin-bottom: 12px;
+  border-radius: 8px;
 
   display: flex;
   justify-content: space-between;
-  align-items: center;
-
-  transition: 0.2s;
 }
 
-.contact:hover {
-  background: #e6f4e5;
+.actions {
+  display: flex;
+  gap: 10px;
 }
 
-/* текст */
-.contact-info {
-  font-size: 15px;
-  line-height: 1.4;
-}
-
-/* кнопка удалить */
-.delete-btn {
-  background: #e53935;
+.edit-btn {
+  background: #ffee58;
   border: none;
-  padding: 6px 10px;
-  color: white;
+  padding: 7px 10px;
   border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.delete-btn:hover {
-  background: #b71c1c;
+.delete-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 7px 10px;
+  border-radius: 6px;
+  cursor: pointer;
 }
+
+.edit-btn:hover { background: #fbc02d; }
+.delete-btn:hover { background: #b71c1c; }

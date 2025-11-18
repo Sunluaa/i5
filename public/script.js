@@ -1,4 +1,3 @@
-
 const API = '/api/contacts';
 
 // загрузка списка
